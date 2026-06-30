@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andy — Phát triển bản thân & Kỹ năng mềm</title>
+<meta name="description" content="Andy là thương hiệu số chuyên cung cấp kho kiến thức phát triển bản thân và nâng cao kỹ năng mềm, giúp bạn thấu hiểu chính mình và thiết kế cuộc sống thịnh vượng.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body.andy {
+    font-family: 'DM Mono', monospace;
+    background: #FAF7F2;
+    color: #1E1D1A;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 3rem;
+    border-bottom: 1px solid #DDD5C8;
+    background: rgba(250,247,242,0.97);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem; font-weight: 600;
+    color: #1E1D1A;
+  }
+  .logo span { font-style: italic; color: #B8885A; }
+  .navlinks { display: flex; gap: 2rem; list-style: none; }
+  .navlinks a {
+    font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #7A7469; text-decoration: none; transition: color 0.2s; cursor: pointer;
+  }
+  .navlinks a:hover, .navlinks a.active { color: #1E1D1A; }
+  .nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid #DDD5C8; padding: 0.4rem 1rem;
+    color: #6A6460; cursor: pointer; background: transparent; transition: all 0.2s;
+  }
+  .nav-btn:hover { background: #1E1D1A; color: #FAF7F2; border-color: #1E1D1A; }
+
+  .burger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    background: transparent; border: none; cursor: pointer;
+    padding: 6px;
+  }
+  .burger span { width: 22px; height: 2px; background: #1E1D1A; display: block; }
+
+  .mobile-menu {
+    display: none;
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 240px; background: #FAF7F2;
+    border-left: 1px solid #DDD5C8;
+    z-index: 200;
+    padding: 1.4rem 1.5rem;
+    flex-direction: column; gap: 1.6rem;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+  }
+  .mobile-menu.open { transform: translateX(0); }
+  .mobile-menu-close {
+    align-self: flex-end; background: none; border: none;
+    font-size: 1.3rem; color: #6A6460; cursor: pointer;
+  }
+  .mobile-menu a {
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #3A3733; text-decoration: none; padding: 0.6rem 0;
+    border-bottom: 1px solid #DDD5C8; cursor: pointer;
+  }
+  .menu-overlay {
+    display: none;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.25); z-index: 150;
+  }
+  .menu-overlay.open { display: block; }
+
+  .page-section { display: none; }
+  .page-section.active { display: block; }
+
+  /* HOME */
+  .hero {
+    padding: 5rem 3rem 4rem;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+    border-bottom: 1px solid #DDD5C8;
+  }
+  .eyebrow {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #B8885A; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .eyebrow::before { content:''; width:24px; height:1px; background:#B8885A; display:inline-block; }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem; font-weight: 300; line-height: 1.08;
+    letter-spacing: -0.01em; color: #1E1D1A; margin-bottom: 1.4rem;
+  }
+  .hero-title em { font-style: italic; color: #B8885A; font-weight: 400; }
+  .hero-sub {
+    font-size: 0.76rem; line-height: 1.9; color: #6A6460;
+    max-width: 420px; margin-bottom: 2rem;
+  }
+  .tag-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .tag {
+    font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid #DDD5C8; padding: 0.28rem 0.8rem; color: #7A7469;
+  }
+  .ctas { display: flex; gap: 1rem; align-items: center; }
+  .btn-p {
+    background: #1E1D1A; color: #FAF7F2; padding: 0.75rem 2rem;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: none; cursor: pointer; transition: background 0.2s;
+  }
+  .btn-p:hover { background: #B8885A; }
+  .btn-g {
+    background: transparent; color: #6A6460; padding: 0.75rem 1.5rem;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid #DDD5C8; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-g:hover { border-color: #1E1D1A; color: #1E1D1A; }
+
+  .hero-visual { position: relative; height: 360px; }
+  .retro-card {
+    background: #EDE4D6; border: 1px solid #D8C9B8; padding: 1.8rem;
+    position: absolute;
+  }
+  .retro-card.main { width: 260px; height: 300px; top: 0; left: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+  .retro-card.accent { width: 180px; height: 150px; bottom: 20px; right: 0; background: #D4E8DF; border-color: #A8CCBC; }
+  .card-tag { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: #8A7A6A; border: 1px solid #C8B8A2; display: inline-block; padding: 0.22rem 0.6rem; }
+  .card-num { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 600; color: #1C1B19; line-height: 1; }
+  .card-lbl { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: #6A6460; margin-top: 0.2rem; }
+  .dots { display: flex; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .accent-num { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: #1C4A38; margin-bottom: 0.3rem; }
+  .accent-sub { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #2C6E52; }
+  .accent-growth { margin-top: 0.8rem; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: #3A8A6A; }
+
+  .stats-row {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3,1fr);
+    border-bottom: 1px solid #DDD5C8;
+  }
+  .stat-box { padding: 2rem 3rem; border-right: 1px solid #DDD5C8; }
+  .stat-box:last-child { border-right: none; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 600; color: #1E1D1A; line-height: 1; margin-bottom: 0.3rem; }
+  .stat-lbl { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: #9A918A; }
+
+  .section { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; border-bottom: 1px solid #DDD5C8; }
+  .sec-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #B8885A; margin-bottom: 0.5rem; }
+  .sec-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: #1E1D1A; margin-bottom: 2.5rem; }
+  .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  .prod-card { border: 1px solid #DDD5C8; overflow: hidden; cursor: pointer; transition: transform 0.2s; }
+  .prod-card:hover { transform: translateY(-3px); }
+  .prod-img { height: 170px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 600; letter-spacing: -0.02em; }
+  .prod-img.p1 { background: #EDE4D6; color: #C4A882; }
+  .prod-img.p2 { background: #D4E8DF; color: #7FBBA3; }
+  .prod-img.p3 { background: #E8DFF5; color: #A888CC; }
+  .prod-info { padding: 1rem 1.2rem; border-top: 1px solid #DDD5C8; background: #FAF7F2; }
+  .prod-name { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: #1E1D1A; margin-bottom: 0.3rem; }
+  .prod-desc { font-size: 0.66rem; color: #9A918A; line-height: 1.7; margin-bottom: 0.7rem; }
+  .prod-price { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: #B8885A; }
+
+  .manifesto { text-align: center; padding: 4rem 3rem; border-bottom: 1px solid #DDD5C8; }
+  .mani-text { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-style: italic; font-weight: 300; color: #2E2B27; line-height: 1.5; max-width: 680px; margin: 0 auto 1.2rem; }
+  .mani-credit { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: #B8885A; }
+
+  /* ABOUT */
+  .about-hero {
+    padding: 5rem 3rem 3.5rem;
+    border-bottom: 1px solid #DDD5C8;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .ah-title { font-family: 'Cormorant Garamond', serif; font-size: 3.8rem; font-weight: 300; line-height: 1.08; color: #1E1D1A; }
+  .ah-title em { font-style: italic; color: #B8885A; font-weight: 400; }
+  .ah-year { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; color: #EBE3D9; line-height: 1; margin-bottom: 1rem; letter-spacing: -0.04em; }
+  .ah-desc { font-size: 0.75rem; line-height: 1.9; color: #6A6460; border-left: 2px solid #DDD5C8; padding-left: 1.2rem; }
+
+  .mission-wrap {
+    max-width: 1100px; margin: 0 auto; padding: 4rem 3rem;
+    border-bottom: 1px solid #DDD5C8;
+    display: grid; grid-template-columns: 220px 1fr; gap: 4rem; align-items: start;
+  }
+  .aside-tag { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: #B8885A; margin-bottom: 0.6rem; }
+  .aside-num { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 300; color: #EBE3D9; line-height: 1; margin-bottom: 0.4rem; }
+  .aside-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: #1E1D1A; }
+  .mission-quote { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-style: italic; font-weight: 300; line-height: 1.45; color: #2E2B27; border-top: 1px solid #DDD5C8; border-bottom: 1px solid #DDD5C8; padding: 1.8rem 0; margin-bottom: 1.8rem; }
+  .mission-body { font-size: 0.75rem; line-height: 2; color: #6A6460; margin-bottom: 2rem; }
+  .milestone-row { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid #DDD5C8; }
+  .milestone { padding: 1.4rem 1.2rem; border-right: 1px solid #DDD5C8; transition: background 0.2s; }
+  .milestone:last-child { border-right: none; }
+  .milestone:hover { background: #F2ECE4; }
+  .ms-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: #B8885A; line-height: 1; margin-bottom: 0.3rem; }
+  .ms-lbl { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7469; }
+
+  .values-wrap { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; border-bottom: 1px solid #DDD5C8; }
+  .v-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2.2rem; }
+  .v-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 600; color: #1E1D1A; }
+  .v-sub { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #B8885A; }
+  .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: #DDD5C8; border: 1px solid #DDD5C8; }
+  .val-card { background: #FAF7F2; padding: 1.8rem 1.4rem; transition: background 0.25s; }
+  .val-card:hover { background: #F0E9DF; }
+  .val-icon { width: 34px; height: 34px; border: 1px solid #DDD5C8; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 15px; color: #B8885A; }
+  .val-name { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: #1E1D1A; margin-bottom: 0.4rem; }
+  .val-desc { font-size: 0.66rem; line-height: 1.8; color: #7A7469; }
+
+  .contact-wrap {
+    max-width: 1100px; margin: 0 auto; padding: 4rem 3rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    border-bottom: 1px solid #DDD5C8;
+  }
+  .ct-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #B8885A; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+  .ct-label::before { content:''; width:22px; height:1px; background:#B8885A; display:inline-block; }
+  .ct-title { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 300; line-height: 1.15; color: #1E1D1A; margin-bottom: 1rem; }
+  .ct-title em { font-style: italic; color: #B8885A; }
+  .ct-note { font-size: 0.72rem; line-height: 1.8; color: #6A6460; }
+  .ct-right { display: flex; flex-direction: column; border: 1px solid #DDD5C8; }
+  .contact-item { display: flex; align-items: center; gap: 1.2rem; padding: 1.4rem 1.4rem; border-bottom: 1px solid #DDD5C8; transition: background 0.2s; }
+  .contact-item:last-child { border-bottom: none; }
+  .contact-item:hover { background: #F2ECE4; }
+  .ci-icon { width: 38px; height: 38px; border: 1px solid #DDD5C8; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #B8885A; flex-shrink: 0; }
+  .ci-lbl { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: #9A918A; margin-bottom: 0.25rem; }
+  .ci-val { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: #1E1D1A; }
+
+  .footer { border-top: 1px solid #DDD5C8; padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+  .f-copy { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #9A918A; }
+  .f-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: #1E1D1A; }
+  .f-logo span { font-style: italic; color: #B8885A; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  .page-section.active { animation: fadeUp 0.45s ease both; }
+
+  @media (max-width: 900px) {
+    .nav { padding: 1rem 1.2rem; }
+    .navlinks { display: none; }
+    .burger { display: flex; }
+    .mobile-menu { display: flex; }
+    .hero, .about-hero, .mission-wrap, .contact-wrap { grid-template-columns: 1fr; padding: 2.5rem 1.2rem; }
+    .stats-row, .products-grid, .values-grid, .milestone-row { grid-template-columns: 1fr; }
+    .stat-box, .milestone { border-right: none; border-bottom: 1px solid #DDD5C8; }
+    .section { padding: 2.5rem 1.2rem; }
+    .hero-title, .ah-title { font-size: 2.6rem; }
+    .hero-visual { height: auto; padding-bottom: 200px; }
+  }
+</style>
+</head>
+<body class="andy">
+
+  <nav class="nav">
+    <div class="logo">Andy<span>.</span></div>
+    <ul class="navlinks">
+      <li><a href="#" onclick="show('home',this)">Sản phẩm</a></li>
+      <li><a href="#" onclick="show('home',this)">Giải pháp</a></li>
+      <li><a href="#" onclick="show('about',this)" id="nav-about">Về chúng tôi</a></li>
+      <li><a href="#" onclick="show('home',this)">Blog</a></li>
+    </ul>
+    <button class="nav-btn" onclick="show('home',null)">Bắt đầu →</button>
+    <button class="burger" onclick="toggleMenu(true)" aria-label="Mở menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="menu-overlay" onclick="toggleMenu(false)"></div>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="toggleMenu(false)">✕</button>
+    <a onclick="show('home',null); toggleMenu(false)">Sản phẩm</a>
+    <a onclick="show('home',null); toggleMenu(false)">Giải pháp</a>
+    <a onclick="show('about',null); toggleMenu(false)">Về chúng tôi</a>
+    <a onclick="show('home',null); toggleMenu(false)">Blog</a>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="page-section active">
+
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Công nghệ số thế hệ mới</div>
+        <h1 class="hero-title">Công nghệ<br>với tâm hồn<br><em>cổ điển</em></h1>
+        <p class="hero-sub">Andy mang đến những sản phẩm số được chắt lọc từ tinh thần thủ công — nơi tính năng gặp gỡ thẩm mỹ, và công nghệ trở nên có chiều sâu.</p>
+        <div class="tag-row">
+          <span class="tag">Phát triển bản thân</span>
+          <span class="tag">Kỹ năng mềm</span>
+          <span class="tag">Thiết kế cuộc sống</span>
+        </div>
+        <div class="ctas">
+          <button class="btn-p">Khám phá ngay</button>
+          <button class="btn-g">Xem demo</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="retro-card main">
+          <div><span class="card-tag">Andy OS v2.4</span></div>
+          <div>
+            <div class="card-num">98</div>
+            <div class="card-lbl">Hiệu suất</div>
+          </div>
+          <div class="dots">
+            <div class="dot" style="background:#B8885A"></div>
+            <div class="dot" style="background:#D8C9B8"></div>
+            <div class="dot" style="background:#EDE4D6"></div>
+          </div>
+        </div>
+        <div class="retro-card accent">
+          <div class="accent-num">+2,400</div>
+          <div class="accent-sub">Người dùng tháng này</div>
+          <div class="accent-growth">↑ 34% so với tháng trước</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num">12K+</div>
+        <div class="stat-lbl">Người dùng tin tưởng</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">98%</div>
+        <div class="stat-lbl">Tỉ lệ hài lòng</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">5 năm</div>
+        <div class="stat-lbl">Kinh nghiệm phát triển</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-label">Bộ sưu tập</div>
+      <div class="sec-title">Sản phẩm tiêu biểu</div>
+      <div class="products-grid">
+        <div class="prod-card">
+          <div class="prod-img p1">A·01</div>
+          <div class="prod-info">
+            <div class="prod-name">Andy Studio</div>
+            <div class="prod-desc">Nền tảng sáng tạo nội dung với giao diện tối giản, lấy cảm hứng từ xưởng thủ công.</div>
+            <div class="prod-price">1.200.000₫</div>
+          </div>
+        </div>
+        <div class="prod-card">
+          <div class="prod-img p2">A·02</div>
+          <div class="prod-info">
+            <div class="prod-name">Andy Flow</div>
+            <div class="prod-desc">Quản lý công việc thông minh, thiết kế theo triết lý "làm ít, đạt nhiều hơn".</div>
+            <div class="prod-price">890.000₫</div>
+          </div>
+        </div>
+        <div class="prod-card">
+          <div class="prod-img p3">A·03</div>
+          <div class="prod-info">
+            <div class="prod-name">Andy Vault</div>
+            <div class="prod-desc">Lưu trữ & bảo mật dữ liệu cá nhân với mã hóa lớp kép, mạnh mẽ như két sắt cổ.</div>
+            <div class="prod-price">650.000₫</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="manifesto">
+      <div class="mani-text">"Chúng tôi tin rằng công nghệ tốt nhất là thứ bạn cảm nhận được — không chỉ dùng."</div>
+      <div class="mani-credit">— Andy, tuyên ngôn thương hiệu 2024</div>
+    </div>
+
+  </div>
+
+  <!-- ABOUT -->
+  <div id="about" class="page-section">
+
+    <div class="about-hero">
+      <div>
+        <div class="eyebrow">Về chúng tôi</div>
+        <h1 class="ah-title">Một brand trẻ,<br>được tạo ra<br>vì <em>con người</em></h1>
+      </div>
+      <div>
+        <div class="ah-year">2024</div>
+        <p class="ah-desc">Andy là thương hiệu số mới thành lập, chuyên cung cấp kho kiến thức phát triển bản thân và nâng cao kỹ năng mềm — được xây dựng để giúp người Việt khám phá chính mình và thiết kế cuộc sống thịnh vượng.</p>
+      </div>
+    </div>
+
+    <div class="mission-wrap">
+      <div>
+        <div class="aside-tag">Sứ mệnh</div>
+        <div class="aside-num">01</div>
+        <div class="aside-title">Vì 1 triệu người Việt</div>
+      </div>
+      <div>
+        <div class="mission-quote">"Giúp 1 triệu người Việt thấu hiểu bản thân — biết mình muốn gì, đam mê gì — không chỉ trong công việc mà trong toàn bộ cuộc sống."</div>
+        <p class="mission-body">Chúng tôi tin rằng mỗi người đều xứng đáng được sống đúng với bản thân mình. Andy ra đời để cung cấp những công cụ, kiến thức và cộng đồng hỗ trợ mỗi cá nhân thiết kế một cuộc sống thịnh vượng — theo cách của riêng họ. Từ kỹ năng mềm, tư duy tự chủ đến thói quen sống tích cực, Andy đồng hành trên từng bước đường.</p>
+        <div class="milestone-row">
+          <div class="milestone"><div class="ms-num">1M</div><div class="ms-lbl">Mục tiêu người dùng</div></div>
+          <div class="milestone"><div class="ms-num">2024</div><div class="ms-lbl">Năm thành lập</div></div>
+          <div class="milestone"><div class="ms-num">∞</div><div class="ms-lbl">Tiềm năng con người</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="values-wrap">
+      <div class="v-header">
+        <div class="v-title">Giá trị cốt lõi</div>
+        <div class="v-sub">Những điều Andy tin tưởng</div>
+      </div>
+      <div class="values-grid">
+        <div class="val-card">
+          <div class="val-icon">◎</div>
+          <div class="val-name">Tự tri</div>
+          <div class="val-desc">Hiểu mình là nền tảng của mọi thành công. Chúng tôi đặt hành trình khám phá bản thân lên hàng đầu.</div>
+        </div>
+        <div class="val-card">
+          <div class="val-icon">◈</div>
+          <div class="val-name">Đam mê</div>
+          <div class="val-desc">Sống với đam mê không phải là đặc quyền — đó là quyền của mỗi người. Andy giúp bạn tìm và nuôi dưỡng điều đó.</div>
+        </div>
+        <div class="val-card">
+          <div class="val-icon">↑</div>
+          <div class="val-name">Phát triển</div>
+          <div class="val-desc">Mỗi ngày một phiên bản tốt hơn. Chúng tôi cung cấp hệ thống kiến thức giúp bạn tiến bộ bền vững.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-wrap">
+      <div>
+        <div class="ct-label">Liên hệ</div>
+        <h2 class="ct-title">Kết nối<br>cùng <em>Andy</em></h2>
+        <p class="ct-note">Chúng tôi luôn sẵn sàng lắng nghe — dù bạn muốn hợp tác, tìm hiểu về sản phẩm, hay đơn giản là muốn chia sẻ câu chuyện của mình.</p>
+      </div>
+      <div class="ct-right">
+        <div class="contact-item">
+          <div class="ci-icon">☎</div>
+          <div><div class="ci-lbl">Điện thoại</div><div class="ci-val">0988 888 888</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon">✉</div>
+          <div><div class="ci-lbl">Email</div><div class="ci-val">abcxyz@gmail.com</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon">⚲</div>
+          <div><div class="ci-lbl">Địa điểm</div><div class="ci-val">Hà Nội, Việt Nam</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="f-copy">© 2024 Andy. All rights reserved.</div>
+    <div class="f-logo">Andy<span>.</span></div>
+    <div class="f-copy">Thịnh vượng bắt đầu từ hiểu mình</div>
+  </div>
+
+<script>
+  function show(id, el) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.navlinks a').forEach(a => a.classList.remove('active'));
+    if (el) el.classList.add('active');
+    window.scrollTo(0,0);
+  }
+  function toggleMenu(open) {
+    document.getElementById('mobileMenu').classList.toggle('open', open);
+    document.querySelector('.menu-overlay').classList.toggle('open', open);
+  }
+  document.querySelector('.navlinks a').classList.add('active');
+</script>
+
+</body>
+</html>
